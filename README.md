@@ -1,6 +1,22 @@
 # Redshift - Full-Stack Mobile Application
 
+> ✅ **Status:** Production-Ready MVP Complete
+
 A production-ready Android mobile application built with **React Native Expo (TypeScript)** for the frontend and **Laravel 12.x** as the backend API, featuring modern UI/UX design, robust authentication with role-based access control, and asynchronous, non-blocking code patterns throughout.
+
+## 🎉 Quick Start (3 Steps)
+
+```bash
+# 1. Backend
+cd backend && composer install && php artisan migrate --seed && php artisan serve
+
+# 2. Frontend  
+cd frontend && npm install && npx expo start
+
+# 3. Login
+# Admin: admin@redshift.com / password
+# User: user@redshift.com / password
+```
 
 ## 🏗️ Project Structure
 
@@ -13,7 +29,7 @@ redshift/
 
 ## 📋 Features
 
-### Authentication System
+### Authentication System ✅
 - User registration with email verification
 - Login/Logout functionality
 - Password reset via email
@@ -22,7 +38,7 @@ redshift/
 - Auto-refresh tokens before expiry
 - Biometric authentication (fingerprint/face)
 
-### Role & Permission Management
+### Role & Permission Management ✅
 - **Super Admin:** Full system access
 - **Admin:** User management, notifications, limited settings
 - **Moderator:** Content moderation capabilities
