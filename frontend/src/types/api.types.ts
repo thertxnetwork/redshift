@@ -22,3 +22,12 @@ export interface ApiError {
   message: string;
   errors?: Record<string, string[]>;
 }
+
+// Error response from server
+export interface ApiErrorResponse {
+  response?: {
+    data: ApiError;
+    status: number;
+  };
+  message: string;
+}

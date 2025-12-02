@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { TextInput, Button, Text, Card, HelperText } from 'react-native-paper';
 import { useLogin } from '@/hooks/useAuth';
-import type { LoginCredentials } from '@/types';
+import type { LoginCredentials, ApiErrorResponse } from '@/types';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -28,6 +28,12 @@ export default function LoginScreen() {
     };
 
     login.mutate(credentials);
+  };
+
+  const getErrorMessage = (): string => {
+    if (!login.error) return '';
+    const error = login.error as ApiErrorResponse;
+    return error.response?.data?.message || error.message || 'Login failed. Please try again.';
   };
 
   return (
@@ -77,7 +83,7 @@ export default function LoginScreen() {
 
             {login.isError && (
               <HelperText type="error" visible={true}>
-                {(login.error as any)?.response?.data?.message || 'Login failed. Please try again.'}
+                {getErrorMessage()}
               </HelperText>
             )}
 
@@ -170,3 +176,4 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 });
+
