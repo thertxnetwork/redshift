@@ -122,7 +122,7 @@ export default function LoginScreen() {
                       icon={secureTextEntry ? 'eye' : 'eye-off'}
                       onPress={() => setSecureTextEntry(!secureTextEntry)}
                       accessibilityLabel={secureTextEntry ? 'Show password' : 'Hide password'}
-                      accessibilityHint="Toggles password visibility"
+                      accessibilityHint="Double tap to toggle password visibility"
                     />
                   }
                   outlineStyle={styles.inputOutline}
