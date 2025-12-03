@@ -24,7 +24,7 @@ function AppContent() {
   return (
     <>
       {isAuthenticated ? <HomeScreen /> : <LoginScreen />}
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </>
   );
 }
