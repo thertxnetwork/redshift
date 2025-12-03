@@ -91,12 +91,13 @@ axiosInstance.interceptors.response.use(
           timeout: error.config?.timeout,
         },
       });
-      console.error('Possible causes:');
-      console.error('1. Backend server is not running');
-      console.error('2. Network connectivity issues');
-      console.error('3. CORS configuration problem');
-      console.error('4. Request timeout');
-      console.error('5. Incorrect API URL:', API_URL);
+      console.error('Possible causes:', [
+        '1. Backend server is not running',
+        '2. Network connectivity issues',
+        '3. CORS configuration problem',
+        '4. Request timeout',
+        `5. Incorrect API URL: ${API_URL}`
+      ].join('\n  '));
     } else {
       // Something else happened in setting up the request
       console.error('Request setup error:', {

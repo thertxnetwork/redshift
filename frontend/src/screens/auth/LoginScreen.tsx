@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,6 +18,18 @@ export default function LoginScreen() {
 
   const login = useLogin();
 
+  // Log detailed error information when login fails
+  useEffect(() => {
+    if (login.error) {
+      const error = login.error as ApiErrorResponse;
+      console.error('Login Error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+    }
+  }, [login.error]);
+
   const handleLogin = () => {
     if (!email || !password) {
       return;
@@ -34,13 +46,6 @@ export default function LoginScreen() {
   const getErrorMessage = (): string => {
     if (!login.error) return '';
     const error = login.error as ApiErrorResponse;
-    
-    // Log detailed error to console
-    console.error('Login Error:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-    });
     
     // Check for network error (no response from server)
     if (!error.response && error.message) {
