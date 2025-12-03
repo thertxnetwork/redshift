@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -17,18 +17,6 @@ export default function LoginScreen() {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const login = useLogin();
-
-  // Log detailed error information when login fails
-  useEffect(() => {
-    if (login.error) {
-      const error = login.error as ApiErrorResponse;
-      console.error('Login Error:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-      });
-    }
-  }, [login.error]);
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -133,6 +121,8 @@ export default function LoginScreen() {
                     <TextInput.Icon
                       icon={secureTextEntry ? 'eye' : 'eye-off'}
                       onPress={() => setSecureTextEntry(!secureTextEntry)}
+                      accessibilityLabel={secureTextEntry ? 'Show password' : 'Hide password'}
+                      accessibilityHint="Toggles password visibility"
                     />
                   }
                   outlineStyle={styles.inputOutline}
