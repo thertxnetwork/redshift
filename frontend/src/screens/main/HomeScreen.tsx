@@ -108,7 +108,7 @@ export default function HomeScreen() {
           <Divider style={styles.divider} />
           
           {notificationsError ? (
-            <Text variant="bodyMedium" style={[styles.value, { color: '#f59e0b' }]}>
+            <Text variant="bodyMedium" style={styles.warningText}>
               Notifications unavailable (backend not configured)
             </Text>
           ) : (
@@ -229,6 +229,9 @@ const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: 12,
+  },
+  warningText: {
+    color: '#f59e0b',
   },
   actionButton: {
     marginBottom: 8,
