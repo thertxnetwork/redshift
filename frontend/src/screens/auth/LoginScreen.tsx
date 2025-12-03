@@ -10,6 +10,19 @@ import { TextInput, Button, Text, Card, HelperText, IconButton, Surface } from '
 import { useLogin } from '@/hooks/useAuth';
 import type { LoginCredentials, ApiErrorResponse } from '@/types';
 
+// Error codes and messages
+const ERROR_CODES = {
+  NETWORK: 'ERR_NETWORK',
+  TIMEOUT: 'ECONNABORTED',
+} as const;
+
+const ERROR_MESSAGES = {
+  NETWORK: 'Network Error: Unable to connect to the server. Please check your internet connection and make sure the backend server is running.',
+  TIMEOUT: 'Request Timeout: The server is taking too long to respond. Please try again.',
+  UNAUTHORIZED: 'Invalid credentials. Please check your email and password.',
+  DEFAULT: 'Login failed. Please try again.',
+} as const;
+
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,21 +47,23 @@ export default function LoginScreen() {
     if (!login.error) return '';
     const error = login.error as ApiErrorResponse;
     
-    // Log detailed error for debugging
-    console.group('🔴 Login Error Details');
-    console.log('Full error object:', error);
-    console.log('Error message:', error.message);
-    console.log('Response data:', error.response?.data);
-    console.log('Response status:', error.response?.status);
-    console.groupEnd();
+    // Log detailed error for debugging (development only)
+    if (__DEV__) {
+      console.group('🔴 Login Error Details');
+      console.log('Full error object:', error);
+      console.log('Error message:', error.message);
+      console.log('Response data:', error.response?.data);
+      console.log('Response status:', error.response?.status);
+      console.groupEnd();
+    }
     
     // Network error (no response from server)
     if (!error.response) {
-      if (error.message === 'Network Error' || error.code === 'ERR_NETWORK') {
-        return 'Network Error: Unable to connect to the server. Please check your internet connection and make sure the backend server is running.';
+      if (error.message === 'Network Error' || error.code === ERROR_CODES.NETWORK) {
+        return ERROR_MESSAGES.NETWORK;
       }
-      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-        return 'Request Timeout: The server is taking too long to respond. Please try again.';
+      if (error.code === ERROR_CODES.TIMEOUT || error.message.includes('timeout')) {
+        return ERROR_MESSAGES.TIMEOUT;
       }
       return `Connection Error: ${error.message || 'Unable to reach the server'}`;
     }
@@ -58,14 +73,14 @@ export default function LoginScreen() {
     const serverMessage = error.response?.data?.message;
     
     if (statusCode === 401 || statusCode === 422) {
-      return serverMessage || 'Invalid credentials. Please check your email and password.';
+      return serverMessage || ERROR_MESSAGES.UNAUTHORIZED;
     }
     
     if (statusCode && statusCode >= 500) {
       return `Server Error (${statusCode}): ${serverMessage || 'The server encountered an error. Please try again later.'}`;
     }
     
-    return serverMessage || error.message || 'Login failed. Please try again.';
+    return serverMessage || error.message || ERROR_MESSAGES.DEFAULT;
   };
 
   return (
