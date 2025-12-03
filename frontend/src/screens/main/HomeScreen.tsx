@@ -8,7 +8,7 @@ import { useUnreadCount } from '@/hooks/useNotifications';
 export default function HomeScreen() {
   const user = useAuthStore((state) => state.user);
   const logout = useLogout();
-  const { data: unreadData } = useUnreadCount();
+  const { data: unreadData, isError: notificationsError } = useUnreadCount();
 
   const handleLogout = () => {
     logout.mutate();
@@ -107,22 +107,30 @@ export default function HomeScreen() {
           </Text>
           <Divider style={styles.divider} />
           
-          <View style={styles.infoRow}>
-            <Text variant="bodyMedium" style={styles.label}>
-              Unread:
+          {notificationsError ? (
+            <Text variant="bodyMedium" style={styles.warningText}>
+              Notifications unavailable (backend not configured)
             </Text>
-            <Text variant="bodyMedium" style={styles.value}>
-              {unreadData?.count || 0}
-            </Text>
-          </View>
+          ) : (
+            <>
+              <View style={styles.infoRow}>
+                <Text variant="bodyMedium" style={styles.label}>
+                  Unread:
+                </Text>
+                <Text variant="bodyMedium" style={styles.value}>
+                  {unreadData?.count || 0}
+                </Text>
+              </View>
 
-          <Button
-            mode="outlined"
-            onPress={() => console.log('Navigate to notifications')}
-            style={styles.marginTop}
-          >
-            View Notifications
-          </Button>
+              <Button
+                mode="outlined"
+                onPress={() => console.log('Navigate to notifications')}
+                style={styles.marginTop}
+              >
+                View Notifications
+              </Button>
+            </>
+          )}
         </Card.Content>
       </Card>
 
@@ -221,6 +229,9 @@ const styles = StyleSheet.create({
   },
   marginTop: {
     marginTop: 12,
+  },
+  warningText: {
+    color: '#f59e0b',
   },
   actionButton: {
     marginBottom: 8,

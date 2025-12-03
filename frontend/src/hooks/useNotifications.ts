@@ -23,6 +23,9 @@ export const useUnreadCount = (): UseQueryResult<{ count: number }, AxiosError> 
     queryFn: notificationsApi.getUnreadCount,
     refetchInterval: 1000 * 30, // Refetch every 30 seconds
     staleTime: 1000 * 20, // 20 seconds
+    retry: false, // Don't retry if backend is not configured
+    // Return default value on error to prevent app crashes
+    placeholderData: { count: 0 },
   });
 };
 
