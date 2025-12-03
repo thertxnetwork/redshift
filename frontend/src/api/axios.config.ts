@@ -85,12 +85,14 @@ axiosInstance.interceptors.response.use(
 
       if (status >= 500) {
         // Server error
-        console.error('❌ Server error:', data);
+        if (__DEV__) {
+          console.error('❌ Server error:', data);
+        }
       }
     } else if (error.request) {
       // Request was made but no response
-      console.error('❌ Network Error - No response received');
       if (__DEV__) {
+        console.error('❌ Network Error - No response received');
         console.error('Request details:', {
           url: error.config?.url,
           method: error.config?.method,
@@ -102,7 +104,9 @@ axiosInstance.interceptors.response.use(
       }
     } else {
       // Something else happened
-      console.error('❌ Request setup error:', error.message);
+      if (__DEV__) {
+        console.error('❌ Request setup error:', error.message);
+      }
     }
     
     if (__DEV__) {

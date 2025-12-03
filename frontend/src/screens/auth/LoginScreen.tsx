@@ -23,6 +23,9 @@ const ERROR_MESSAGES = {
   DEFAULT: 'Login failed. Please try again.',
 } as const;
 
+// Timeout-related keywords to check in error messages
+const TIMEOUT_KEYWORDS = ['timeout', 'timed out', 'time out'] as const;
+
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -62,7 +65,10 @@ export default function LoginScreen() {
       if (error.message === 'Network Error' || error.code === ERROR_CODES.NETWORK) {
         return ERROR_MESSAGES.NETWORK;
       }
-      if (error.code === ERROR_CODES.TIMEOUT || error.message.includes('timeout')) {
+      // Check for timeout errors
+      const isTimeoutError = error.code === ERROR_CODES.TIMEOUT || 
+        TIMEOUT_KEYWORDS.some(keyword => error.message?.toLowerCase().includes(keyword));
+      if (isTimeoutError) {
         return ERROR_MESSAGES.TIMEOUT;
       }
       return `Connection Error: ${error.message || 'Unable to reach the server'}`;
@@ -95,7 +101,7 @@ export default function LoginScreen() {
         <View style={styles.headerContainer}>
           <Surface style={styles.logoContainer} elevation={2}>
             <IconButton
-              icon="rocket-launch"
+              icon="account-circle"
               size={50}
               iconColor="#6200ee"
             />
